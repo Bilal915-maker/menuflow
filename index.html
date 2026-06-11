@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MenuFlow — Gestion digitale restaurant</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #ff6b35;
+    --primary-dark: #e85520;
+    --dark: #1a1a2e;
+    --darker: #0f0f1a;
+    --card: #16213e;
+    --text: #e8e6df;
+    --muted: #8a8a9a;
+    --success: #00d68f;
+    --border: #2a2a4a;
+  }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: var(--darker); color: var(--text); }
+  
+  /* NAV */
+  nav { padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--darker); position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), #ff9a56); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  /* HERO */
+  .hero { padding: 100px 40px; text-align: center; max-width: 900px; margin: 0 auto; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.3); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+  .hero h1 { font-size: 56px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--primary), #ff9a56); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 18px; color: var(--muted); line-height: 1.7; max-width: 600px; margin: 0 auto 40px; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--primary); color: white; border: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; }
+  .hero-stats { display: flex; justify-content: center; gap: 48px; margin-top: 60px; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--primary); }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* FEATURES */
+  .section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-title { text-align: center; font-size: 36px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .section-sub { text-align: center; color: var(--muted); font-size: 16px; margin-bottom: 56px; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; transition: border-color 0.2s; }
+  .feature-card:hover { border-color: var(--primary); }
+  .feature-icon { width: 44px; height: 44px; background: rgba(255,107,53,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+  .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* DEMO */
+  .demo-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 40px; }
+  .demo-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .demo-text h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+  .demo-text p { color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+  .demo-list { list-style: none; }
+  .demo-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 15px; }
+  .demo-list li::before { content: "✓"; color: var(--success); font-weight: 700; }
+  .demo-visual { background: var(--darker); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+  .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .order-item:last-child { border-bottom: none; }
+  .order-name { font-size: 14px; font-weight: 500; }
+  .order-qty { background: rgba(255,107,53,0.1); color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .order-price { font-size: 14px; font-weight: 600; }
+  .order-total { display: flex; justify-content: space-between; padding: 16px 0 0; font-weight: 700; font-size: 16px; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .price-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; position: relative; }
+  .price-card.popular { border-color: var(--primary); box-shadow: 0 0 30px rgba(255,107,53,0.15); }
+  .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .plan-name { font-size: 14px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+  .plan-price { font-size: 42px; font-weight: 700; margin-bottom: 4px; }
+  .plan-price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+  .plan-desc { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+  .plan-features { list-style: none; margin-bottom: 28px; }
+  .plan-features li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin-bottom: 10px; color: var(--muted); }
+  .plan-features li::before { content: "✓"; color: var(--success); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .plan-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
+  .plan-btn.outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .plan-btn.filled { background: var(--primary); color: white; }
+
+  /* CTA */
+  .cta-section { padding: 100px 40px; text-align: center; }
+  .cta-section h2 { font-size: 40px; font-weight: 700; margin-bottom: 16px; }
+  .cta-section p { color: var(--muted); font-size: 17px; margin-bottom: 36px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+  footer p { font-size: 13px; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .features-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .demo-inner { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 36px; }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">🍽️</div>
+    MenuFlow
+  </div>
+  <div class="nav-links">
+    <a href="#fonctionnalites">Fonctionnalités</a>
+    <a href="#demo">Démonstration</a>
+    <a href="#tarifs">Tarifs</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('tarifs').scrollIntoView({behavior:'smooth'})">Essai gratuit 14 jours</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🚀 Nouveau — Gestion restaurant 100% digitale</div>
+  <h1>Gérez votre restaurant<br><span>sans stress, sans papier</span></h1>
+  <p>Menu QR code, commandes en temps réel, caisse simplifiée, fidélité clients automatique. Tout en un, depuis votre smartphone.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('tarifs').scrollIntoView({behavior:'smooth'})">Commencer gratuitement →</button>
+    <button class="btn-secondary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Voir la démo</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">+40%</div><div class="stat-label">Commandes en plus</div></div>
+    <div class="stat"><div class="stat-num">-2h</div><div class="stat-label">Gagnées par jour</div></div>
+    <div class="stat"><div class="stat-num">0€</div><div class="stat-label">De matériel requis</div></div>
+  </div>
+</section>
+
+<section class="section" id="fonctionnalites">
+  <h2 class="section-title">Tout ce dont votre restaurant a besoin</h2>
+  <p class="section-sub">Une seule application pour gérer toute votre activité</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>Menu QR Code Digital</h3>
+      <p>Vos clients scannent le QR code sur la table et consultent votre menu en temps réel. Modifiez les plats et prix en 30 secondes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛎️</div>
+      <h3>Commandes en temps réel</h3>
+      <p>Les commandes arrivent directement sur votre écran ou imprimante de cuisine. Zéro erreur, zéro perte de commande.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💳</div>
+      <h3>Paiement intégré</h3>
+      <p>Acceptez les paiements par carte, Apple Pay, Google Pay. L'addition est automatiquement calculée et envoyée par SMS.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Stats du jour</h3>
+      <p>Chiffre d'affaires, plats les plus vendus, heures de pointe, ticket moyen. Tout en temps réel depuis votre téléphone.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎁</div>
+      <h3>Fidélité automatique</h3>
+      <p>Programme de fidélité intégré. Vos clients cumulent des points automatiquement et reçoivent leurs récompenses par SMS.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚚</div>
+      <h3>Click & Collect</h3>
+      <p>Vos clients commandent et paient en ligne, récupèrent leur commande sans attendre. Augmentez votre chiffre d'affaires sans effort.</p>
+    </div>
+  </div>
+</section>
+
+<div class="demo-section" id="demo">
+  <div class="demo-inner">
+    <div class="demo-text">
+      <h2>Votre cuisine reçoit les commandes instantanément</h2>
+      <p>Fini les erreurs de communication entre la salle et la cuisine. Chaque commande arrive directement sur l'écran de cuisine avec les détails et le numéro de table.</p>
+      <ul class="demo-list">
+        <li>Commande reçue en moins de 2 secondes</li>
+        <li>Notification sonore en cuisine</li>
+        <li>Statut de préparation visible par le client</li>
+        <li>Historique complet des commandes</li>
+        <li>Compatible tablette, écran cuisine, imprimante</li>
+      </ul>
+    </div>
+    <div class="demo-visual">
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:16px;">🛎️ Commande #47 — Table 5</div>
+      <div class="order-item">
+        <div class="order-name">🌯 Kebab XL Mixte</div>
+        <div class="order-qty">x2</div>
+        <div class="order-price">19,80€</div>
+      </div>
+      <div class="order-item">
+        <div class="order-name">🍟 Frites maison</div>
+        <div class="order-qty">x2</div>
+        <div class="order-price">7,00€</div>
+      </div>
+      <div class="order-item">
+        <div class="order-name">🥤 Boisson 50cl</div>
+        <div class="order-qty">x3</div>
+        <div class="order-price">7,50€</div>
+      </div>
+      <div class="order-item">
+        <div class="order-name">🧆 Falafel assiette</div>
+        <div class="order-qty">x1</div>
+        <div class="order-price">11,00€</div>
+      </div>
+      <div class="order-total">
+        <span>Total</span>
+        <span style="color:var(--primary)">45,30€</span>
+      </div>
+      <div style="margin-top:16px;padding:10px;background:rgba(0,214,143,0.1);border-radius:8px;font-size:13px;color:var(--success);text-align:center;">✅ Payé en ligne — Prêt dans 15 min</div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="tarifs">
+  <h2 class="section-title">Tarifs simples, sans surprise</h2>
+  <p class="section-sub">14 jours d'essai gratuit — Aucune carte bancaire requise</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-name">Essentiel</div>
+      <div class="plan-price">49€ <span>/ mois</span></div>
+      <div class="plan-desc">Pour les petits restaurants qui veulent se digitaliser.</div>
+      <ul class="plan-features">
+        <li>Menu QR code illimité</li>
+        <li>Commandes en temps réel</li>
+        <li>1 écran cuisine</li>
+        <li>Stats basiques</li>
+        <li>Support par email</li>
+      </ul>
+      <button class="plan-btn outline">Essayer gratuitement</button>
+    </div>
+    <div class="price-card popular">
+      <div class="popular-badge">⭐ Le plus populaire</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">99€ <span>/ mois</span></div>
+      <div class="plan-desc">Pour les restaurants qui veulent maximiser leur chiffre d'affaires.</div>
+      <ul class="plan-features">
+        <li>Tout Essentiel +</li>
+        <li>Paiement en ligne intégré</li>
+        <li>Click & Collect</li>
+        <li>Programme de fidélité</li>
+        <li>Stats avancées temps réel</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <button class="plan-btn filled">Essayer gratuitement</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Multi-sites</div>
+      <div class="plan-price">199€ <span>/ mois</span></div>
+      <div class="plan-desc">Pour les chaînes et franchises avec plusieurs établissements.</div>
+      <ul class="plan-features">
+        <li>Tout Pro +</li>
+        <li>Jusqu'à 5 restaurants</li>
+        <li>Dashboard centralisé</li>
+        <li>Gestion multi-menus</li>
+        <li>API et intégrations</li>
+        <li>Account manager dédié</li>
+      </ul>
+      <button class="plan-btn outline">Nous contacter</button>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Prêt à digitaliser votre restaurant ?</h2>
+  <p>Rejoignez les restaurateurs qui ont augmenté leur chiffre d'affaires avec MenuFlow.</p>
+  <button class="btn-primary" style="font-size:16px;padding:16px 36px;">Démarrer l'essai gratuit — 14 jours →</button>
+</section>
+
+<footer>
+  <p>© 2026 MenuFlow — Tous droits réservés</p>
+  <div class="footer-links">
+    <a href="#">Mentions légales</a>
+    <a href="#">Politique de confidentialité</a>
+    <a href="#">CGU</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
